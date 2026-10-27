@@ -22,7 +22,7 @@ function App() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/cases', {
+      const response = await fetch('http://https://ai-mystery-room-ztkk.onrender.com/api/cases', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ premise, difficulty }),
@@ -58,7 +58,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cases/${mystery.caseId}/accuse`,
+        `http://https://ai-mystery-room-ztkk.onrender.com/api/cases/${mystery.caseId}/accuse`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
