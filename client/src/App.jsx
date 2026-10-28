@@ -1,4 +1,7 @@
+
 import { useState } from 'react'
+
+const API_BASE_URL = 'https://ai-mystery-room-ztkk.onrender.com'
 
 function App() {
   const [showCreate, setShowCreate] = useState(false)
@@ -22,7 +25,7 @@ function App() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://https://ai-mystery-room-ztkk.onrender.com/api/cases', {
+      const response = await fetch(`${API_BASE_URL}/api/cases`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ premise, difficulty }),
@@ -39,7 +42,7 @@ function App() {
     } catch (err) {
       setError(
         err.message === 'Failed to fetch'
-          ? 'Cannot connect to the backend. Make sure the server is running.'
+          ? 'Cannot connect to the backend. Please try again in a moment.'
           : err.message
       )
     } finally {
@@ -58,7 +61,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `http://https://ai-mystery-room-ztkk.onrender.com/api/cases/${mystery.caseId}/accuse`,
+        `${API_BASE_URL}/api/cases/${mystery.caseId}/accuse`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -79,7 +82,7 @@ function App() {
     } catch (err) {
       setError(
         err.message === 'Failed to fetch'
-          ? 'Cannot connect to the backend. Check that the server is running.'
+          ? 'Cannot connect to the backend. Please try again in a moment.'
           : err.message
       )
     } finally {
@@ -105,9 +108,11 @@ function App() {
         <a href="/" className="text-xl font-bold tracking-wide">
           <span className="text-purple-400">◆</span> MYSTERY ROOM
         </a>
+
         <span className="hidden text-sm text-gray-400 sm:block">
           Every clue tells a story.
         </span>
+
         <button
           onClick={() => setShowCreate(true)}
           className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold transition hover:bg-purple-500"
@@ -149,6 +154,7 @@ function App() {
               inside every case.
             </p>
           </div>
+
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-purple-400/50">
             <div className="text-3xl">🕵️</div>
             <h2 className="mt-5 text-xl font-bold">Question Suspects</h2>
@@ -157,6 +163,7 @@ function App() {
               the truth.
             </p>
           </div>
+
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-purple-400/50">
             <div className="text-3xl">⚖️</div>
             <h2 className="mt-5 text-xl font-bold">Solve the Case</h2>
@@ -171,6 +178,7 @@ function App() {
           <div className="mt-12 w-full max-w-xl rounded-2xl border border-purple-400/30 bg-[#12121d] p-6 text-left">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Create a Mystery</h2>
+
               <button
                 onClick={() => setShowCreate(false)}
                 className="text-2xl text-gray-400 hover:text-white"
@@ -185,6 +193,7 @@ function App() {
                 <label htmlFor="scenario" className="mb-2 block font-medium">
                   Describe your mystery
                 </label>
+
                 <textarea
                   id="scenario"
                   name="scenario"
@@ -195,6 +204,7 @@ function App() {
                   placeholder="Example: A priceless diamond disappeared from a locked museum overnight..."
                   className="min-h-32 w-full rounded-xl border border-white/10 bg-black/30 p-4 text-white outline-none placeholder:text-gray-500 focus:border-purple-400"
                 />
+
                 <p className="mt-2 text-sm text-gray-500">
                   Write at least 20 characters to begin.
                 </p>
@@ -204,6 +214,7 @@ function App() {
                 <label htmlFor="difficulty" className="mb-2 block font-medium">
                   Choose difficulty
                 </label>
+
                 <select
                   id="difficulty"
                   name="difficulty"
@@ -239,12 +250,15 @@ function App() {
             <p className="text-sm font-semibold uppercase tracking-widest text-purple-300">
               {mystery.difficulty} Investigation
             </p>
+
             <h2 className="mt-3 text-3xl font-bold">{mystery.title}</h2>
+
             <p className="mt-5 whitespace-pre-line leading-8 text-gray-300">
               {mystery.story}
             </p>
 
             <h3 className="mt-8 text-xl font-bold">Suspects</h3>
+
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {mystery.suspects?.map((suspect) => (
                 <div
@@ -254,6 +268,7 @@ function App() {
                   <h4 className="font-semibold text-purple-300">
                     {suspect.name}
                   </h4>
+
                   <p className="mt-2 text-sm leading-6 text-gray-400">
                     {suspect.description}
                   </p>
@@ -262,6 +277,7 @@ function App() {
             </div>
 
             <h3 className="mt-8 text-xl font-bold">Evidence Clues</h3>
+
             <p className="mt-2 text-sm text-gray-400">
               Click each clue to investigate it.
             </p>
@@ -277,7 +293,10 @@ function App() {
                     disabled={Boolean(accusation)}
                     onClick={() => {
                       if (!discovered) {
-                        setDiscoveredClues((previous) => [...previous, clue.id])
+                        setDiscoveredClues((previous) => [
+                          ...previous,
+                          clue.id,
+                        ])
                       }
                     }}
                     className="block w-full rounded-xl border border-white/10 bg-black/20 p-4 text-left transition hover:border-purple-400/50 disabled:cursor-default"
@@ -286,6 +305,7 @@ function App() {
                       Clue {index + 1}{' '}
                       {discovered ? '✓ Discovered' : '— Click to investigate'}
                     </span>
+
                     {discovered && (
                       <p className="mt-2 leading-7 text-gray-300">
                         {clue.description}
@@ -297,12 +317,14 @@ function App() {
             </div>
 
             <p className="mt-4 text-sm text-gray-400">
-              Clues discovered: {discoveredClues.length} / {mystery.clues?.length ?? 0}
+              Clues discovered: {discoveredClues.length} /{' '}
+              {mystery.clues?.length ?? 0}
             </p>
 
             {!accusation && (
               <div className="mt-8 border-t border-white/10 pt-6">
                 <h3 className="text-xl font-bold">Make Your Accusation</h3>
+
                 <p className="mt-2 text-sm text-gray-400">
                   Review the evidence and choose who you believe is responsible.
                 </p>
@@ -325,6 +347,7 @@ function App() {
                         onChange={() => setSelectedSuspect(suspect.id)}
                         className="accent-purple-500"
                       />
+
                       <span>{suspect.name}</span>
                     </label>
                   ))}
@@ -350,7 +373,9 @@ function App() {
                 <h3 className="text-2xl font-bold">
                   {accusation.correct ? '🎉 Case Solved!' : '🔍 Case Closed'}
                 </h3>
+
                 <p className="mt-3 text-gray-300">{accusation.message}</p>
+
                 <p className="mt-5 text-lg">
                   <span className="text-gray-400">Culprit: </span>
                   <span className="font-bold text-purple-300">
@@ -359,16 +384,22 @@ function App() {
                     )?.name || 'Unknown'}
                   </span>
                 </p>
+
                 <h4 className="mt-5 font-bold">Solution Explanation</h4>
+
                 <p className="mt-2 leading-7 text-gray-300">
                   {accusation.solutionExplanation}
                 </p>
+
                 <p className="mt-5 text-2xl font-bold text-purple-300">
                   Final Score: {accusation.score}
                 </p>
+
                 <p className="mt-2 text-sm text-gray-400">
-                  Clues discovered: {accusation.discoveredClues} · Hints used: {accusation.hintsUsed}
+                  Clues discovered: {accusation.discoveredClues} · Hints used:{' '}
+                  {accusation.hintsUsed}
                 </p>
+
                 <button
                   onClick={startNewMystery}
                   className="mt-6 rounded-lg bg-purple-600 px-5 py-3 font-semibold transition hover:bg-purple-500"
